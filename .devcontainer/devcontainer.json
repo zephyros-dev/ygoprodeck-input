@@ -1,72 +1,70 @@
 {
-    "build": {
-        "args": {
-            "USERNAME": "vscode"
+  "build": {
+    "args": {
+      "USERNAME": "vscode"
+    },
+    "dockerfile": "Dockerfile"
+  },
+  "containerUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bierner.markdown-mermaid",
+        "brody715.vscode-cuelang",
+        "charliermarsh.ruff",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "GitHub.copilot-labs",
+        "GitHub.copilot",
+        "GitHub.vscode-pull-request-github",
+        "Grafana.vscode-jsonnet",
+        "hashicorp.terraform",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker",
+        "ms-python.black-formatter",
+        "njpwerner.autodocstring",
+        "pascalreitermann93.vscode-yaml-sort",
+        "redhat.ansible",
+        "richie5um2.vscode-sort-json",
+        "samuelcolvin.jinjahtml",
+        "signageos.signageos-vscode-sops",
+        "sjhuangx.vscode-scheme",
+        "vivaxy.vscode-conventional-commits",
+        "wholroyd.jinja",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
-        "dockerfile": "Dockerfile"
-    },
-    "containerUser": "vscode",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "bierner.markdown-mermaid",
-                "brody715.vscode-cuelang",
-                "charliermarsh.ruff",
-                "eamodio.gitlens",
-                "esbenp.prettier-vscode",
-                "GitHub.copilot-labs",
-                "GitHub.copilot",
-                "GitHub.vscode-pull-request-github",
-                "Grafana.vscode-jsonnet",
-                "hashicorp.terraform",
-                "mhutchie.git-graph",
-                "ms-azuretools.vscode-docker",
-                "ms-python.black-formatter",
-                "njpwerner.autodocstring",
-                "pascalreitermann93.vscode-yaml-sort",
-                "redhat.ansible",
-                "richie5um2.vscode-sort-json",
-                "samuelcolvin.jinjahtml",
-                "signageos.signageos-vscode-sops",
-                "sjhuangx.vscode-scheme",
-                "vivaxy.vscode-conventional-commits",
-                "wholroyd.jinja",
-                "yzhang.markdown-all-in-one"
-            ],
-            "settings": {
-                "[json]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[jsonc]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[python]": {
-                    "editor.codeActionsOnSave": {
-                        "source.organizeImports": true
-                    },
-                    "editor.defaultFormatter": "ms-python.black-formatter"
-                },
-                "[yaml]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "editor.codeActionsOnSave": {
-                    "source.fixAll.sortJSON": true
-                },
-                "editor.formatOnSave": true,
-            }
-        }
-    },
-    "mounts": [
-        "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
-        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
-        "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
-    ],
-    "name": "Infra",
-    "remoteEnv": {
-        "EDITOR": "code --wait",
-    },
-    "remoteUser": "vscode",
-    "runArgs": [
-        "--userns=keep-id"
-    ]
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[python]": {
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+          },
+          "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "editor.codeActionsOnSave": {
+          "source.fixAll.sortJSON": true
+        },
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.local/share/fish,target=/home/vscode/.local/share/fish,type=bind",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    "source=precommit-cache,target=/home/vscode/.cache/pre-commit,type=volume",
+    "source=${localEnv:HOME}/Downloads,target=/Downloads,type=bind"
+  ],
+  "name": "Infra",
+  "remoteEnv": {
+    "EDITOR": "code --wait"
+  },
+  "remoteUser": "vscode"
 }

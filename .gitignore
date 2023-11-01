@@ -1,2 +1,4 @@
 *.csv
+available.txt
 missing.txt
+config.ini
