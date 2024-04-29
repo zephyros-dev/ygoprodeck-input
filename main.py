@@ -17,10 +17,14 @@ MISSING_CARD_QUANTITY = 99
 df = pd.read_csv(config.get("global", "collection_path")).sort_values(by=["cardcode"])
 df.dropna(inplace=True)
 df = df.astype({"cardq": int, "cardid": int})
-missing_cards_string = open("missing.txt").read().replace("\n", " ").split()
-missing_cards_list = "|".join([f"{int(x):03d}" for x in missing_cards_string])
-available_card_string = open("available.txt").read().replace("\n", " ").split()
-available_card_list = "|".join([f"{int(x):03d}" for x in available_card_string])
+missing_cards_list = []
+available_card_list = []
+if Path("missing.txt").is_file():
+    missing_cards_string = open("missing.txt").read().replace("\n", " ").split()
+    missing_cards_list = "|".join([f"{int(x):03d}" for x in missing_cards_string])
+if Path("available.txt").is_file():
+    available_card_string = open("available.txt").read().replace("\n", " ").split()
+    available_card_list = "|".join([f"{int(x):03d}" for x in available_card_string])
 if missing_cards_list:
     df.loc[
         df["cardcode"].str.contains(missing_cards_list), "cardq"
