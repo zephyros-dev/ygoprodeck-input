@@ -2,9 +2,10 @@
 
 import configparser
 import csv
-import pandas as pd
-from pathlib import Path
 import re
+from pathlib import Path
+
+import pandas as pd
 
 config = configparser.ConfigParser()
 
@@ -25,6 +26,9 @@ if Path("missing.txt").is_file():
 if Path("available.txt").is_file():
     available_card_string = open("available.txt").read().replace("\n", " ").split()
     available_card_list = "|".join([f"{int(x):03d}" for x in available_card_string])
+if missing_cards_list and available_card_list:
+    print("Both missing and available card lists are present. Please remove one.")
+    exit()
 if missing_cards_list:
     df.loc[
         df["cardcode"].str.contains(missing_cards_list), "cardq"
