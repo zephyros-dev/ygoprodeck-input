@@ -13,31 +13,48 @@ config.read("default.ini")
 if Path("config.ini").is_file():
     config.read("config.ini")
 
+AVAILABLE_CARD_QUANTITY = 1
 MISSING_CARD_QUANTITY = 99
 
 df = pd.read_csv(config.get("global", "collection_path")).sort_values(by=["cardcode"])
 df.dropna(inplace=True)
 df = df.astype({"cardq": int, "cardid": int})
-missing_cards_list = []
-available_card_list = []
-if Path("missing.txt").is_file():
-    missing_cards_string = open("missing.txt").read().replace("\n", " ").split()
-    missing_cards_list = "|".join([f"{int(x):03d}" for x in missing_cards_string])
-if Path("available.txt").is_file():
-    available_card_string = open("available.txt").read().replace("\n", " ").split()
-    available_card_list = "|".join([f"{int(x):03d}" for x in available_card_string])
-if missing_cards_list and available_card_list:
+
+if Path("missing.txt").is_file() and Path("available.txt").is_file():
     print("Both missing and available card lists are present. Please remove one.")
     exit()
-if missing_cards_list:
-    df.loc[
-        df["cardcode"].str.contains(missing_cards_list), "cardq"
-    ] = MISSING_CARD_QUANTITY
-    print(df[df["cardq"] == MISSING_CARD_QUANTITY])
-if available_card_list:
-    df["cardq"] = MISSING_CARD_QUANTITY
-    df.loc[df["cardcode"].str.contains(available_card_list), "cardq"] = 1
-    print(df[df["cardq"] != MISSING_CARD_QUANTITY])
+elif Path("missing.txt").is_file():
+    action = "missing"
+elif Path("available.txt").is_file():
+    action = "available"
+else:
+    print("No missing or available card list found.")
+    exit()
+
+cards_raw_list = open(f"{action}.txt").read().replace("\n", " ").split()
+cards_string_list = []
+for card in cards_raw_list:
+    if "-" in card:
+        start, end = card.split("-")
+        for i in range(int(start), int(end) + 1):
+            cards_string_list.append(i)
+    else:
+        cards_string_list.append(card)
+cards_df_string = "|".join([f"{int(card):03d}" for card in cards_string_list])
+
+print("Total cards:", df.shape[0])
+
+if action == "missing":
+    quantity_init = AVAILABLE_CARD_QUANTITY
+    quantity_to_change = MISSING_CARD_QUANTITY
+if action == "available":
+    quantity_init = MISSING_CARD_QUANTITY
+    quantity_to_change = AVAILABLE_CARD_QUANTITY
+
+df["cardq"] = quantity_init
+df.loc[df["cardcode"].str.contains(cards_df_string), "cardq"] = quantity_to_change
+
+print(df[df["cardq"] == quantity_to_change])
 df.to_csv("output.csv", index=False, quoting=csv.QUOTE_NONNUMERIC)
 Path(config.get("global", "collection_path")).rename(
     re.sub(".csv", "_old.csv", config.get("global", "collection_path"))
