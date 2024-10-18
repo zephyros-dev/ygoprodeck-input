@@ -14,7 +14,7 @@ if Path("config.ini").is_file():
     config.read("config.ini")
 
 AVAILABLE_CARD_QUANTITY = 1
-MISSING_CARD_QUANTITY = 99
+MISSING_CARD_QUANTITY = 0
 
 df = pd.read_csv(config.get("global", "collection_path")).sort_values(by=["cardcode"])
 df.dropna(inplace=True)
