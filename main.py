@@ -68,7 +68,9 @@ if len(cards_string_list) != df[df["cardq"] == quantity_to_change].shape[0]:
 else:
     print("All cards in the list were updated. Saving...")
     df.to_csv("output.csv", index=False, quoting=csv.QUOTE_NONNUMERIC)
-    Path(config.get("global", "collection_path")).rename(
-        re.sub(".csv", "_old.csv", config.get("global", "collection_path"))
-    )
+    collection_path = config.get("global", "collection_path")
+    old_collection_path = re.sub(".csv", "_old.csv", collection_path)
+    if Path(old_collection_path).exists():
+        Path(old_collection_path).unlink()
+    Path(collection_path).rename(old_collection_path)
     print("Saving completed")

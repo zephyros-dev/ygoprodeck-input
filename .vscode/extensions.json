@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "eamodio.gitlens",
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml"
+    ]
+}
